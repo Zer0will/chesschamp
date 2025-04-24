@@ -1,0 +1,4 @@
+pygame==2.1.2
+python-chess==1.9.4
+flask==2.2.3
+stripe==5.0.0 

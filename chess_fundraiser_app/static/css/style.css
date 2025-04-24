@@ -1,0 +1,145 @@
+/* Basic Reset & Body */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0; /* Light background for contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Main Container for index.html */
+.container {
+    background-color: #ffffff; /* White card background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Max width for larger screens */
+    width: 100%;
+    text-align: center;
+}
+
+/* Responsive Image */
+.fundraiser-image {
+    max-width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below image */
+    margin-bottom: 25px; /* Space before button */
+    border-radius: 4px; /* Slightly rounded corners */
+}
+
+/* Unlock Button Styling */
+.unlock-button {
+    display: inline-block; /* Allows setting padding/margin */
+    background-color: #005eb8; /* Blue color similar to image */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px; /* Pill shape */
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none; /* Remove underline from link */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.unlock-button:hover {
+    background-color: #004a94; /* Darker blue on hover */
+}
+
+.unlock-button:active {
+    transform: scale(0.98); /* Slight press effect */
+}
+
+/* Settings Page Specific Styles */
+.settings-container {
+    text-align: center;
+}
+
+.settings-container h1 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.settings-container p {
+    margin-bottom: 30px;
+    color: #555;
+    font-style: italic;
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section h2 {
+    margin-bottom: 15px;
+    color: #444;
+    font-size: 1.2em;
+}
+
+.setting-button {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background-color 0.3s ease;
+}
+
+.setting-button:hover {
+    background-color: #c8c8c8;
+}
+
+/* Selected state styling */
+.setting-button.selected {
+    background-color: #aed581; /* Light green */
+    font-weight: bold;
+}
+
+.start-game-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.start-game-button:hover:not([disabled]) {
+    background-color: #45a049;
+}
+
+/* Disabled start button */
+.start-game-button[disabled] {
+    background-color: #cccccc;
+    color: #999999;
+    cursor: not-allowed;
+}
+
+/* Active start button */
+.start-game-button.active {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+/* Status message styling */
+#status-message {
+    margin-top: 15px;
+    min-height: 20px;
+    color: #d32f2f; /* Red for errors */
+    font-size: 0.9em;
+}

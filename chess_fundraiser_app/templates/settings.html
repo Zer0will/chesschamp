@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        .settings-section {
+            margin-bottom: 30px;
+        }
+        .setting-button {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .setting-button.selected {
+            background-color: #aed581;
+            font-weight: bold;
+        }
+        .start-game-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .start-game-button[disabled] {
+            background-color: #cccccc;
+            color: #999999;
+            cursor: not-allowed;
+        }
+        #status-message {
+            margin-top: 15px;
+            min-height: 20px;
+            color: #d32f2f;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Setup</h1>
+        <p>(Payment Successful - Simulation)</p>
+
+        <div class="settings-section">
+            <h2>Select AI Difficulty:</h2>
+            <button class="setting-button difficulty-button" data-value="0">Beginner (0)</button>
+            <button class="setting-button difficulty-button" data-value="1">Easy (1)</button>
+            <button class="setting-button difficulty-button" data-value="2">Intermediate (2)</button>
+            <button class="setting-button difficulty-button" data-value="3">Hard (3)</button>
+            <button class="setting-button difficulty-button" data-value="4">Impossible (4)</button>
+        </div>
+
+        <div class="settings-section">
+            <h2>Select Your Color:</h2>
+            <button class="setting-button color-button" data-value="white">Play as White</button>
+            <button class="setting-button color-button" data-value="black">Play as Black</button>
+        </div>
+
+        <button class="start-game-button" disabled>Start Playing</button>
+        <div id="status-message"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedDifficulty = null;
+            let selectedColor = null;
+            const startButton = document.querySelector('.start-game-button');
+            const statusMessage = document.getElementById('status-message');
+            
+            // Disable start button until selections are made
+            updateStartButton();
+            
+            // Set up difficulty buttons
+            const difficultyButtons = document.querySelectorAll('.difficulty-button');
+            difficultyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove selected class from all difficulty buttons
+                    difficultyButtons.forEach(btn => btn.classList.remove('selected'));
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                    
+                    // Store the difficulty value
+                    selectedDifficulty = this.getAttribute('data-value');
+                    console.log(`Selected difficulty: ${selectedDifficulty}`);
+                    
+                    // Update start button state
+                    updateStartButton();
+                });
+            });
+            
+            // Set up color buttons
+            const colorButtons = document.querySelectorAll('.color-button');
+            colorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove selected class from all color buttons
+                    colorButtons.forEach(btn => btn.classList.remove('selected'));
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                    
+                    // Store the color value
+                    selectedColor = this.getAttribute('data-value');
+                    console.log(`Selected color: ${selectedColor}`);
+                    
+                    // Update start button state
+                    updateStartButton();
+                });
+            });
+            
+            // Setup start game button
+            startButton.addEventListener('click', function() {
+                if (selectedDifficulty !== null && selectedColor !== null) {
+                    // Show loading state
+                    startButton.disabled = true;
+                    startButton.textContent = 'Starting Game...';
+                    statusMessage.textContent = 'Launching chess game...';
+                    statusMessage.style.color = '#4285f4'; // Blue color for info
+                    
+                    // Fetch to start the game
+                    fetch(`/start-game?difficulty=${selectedDifficulty}&color=${selectedColor}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Game start response:', data);
+                            if (data.status === 'success') {
+                                // Game launched successfully
+                                statusMessage.textContent = data.message;
+                                statusMessage.style.color = '#0f9d58'; // Green for success
+                                
+                                // After a successful launch, keep the UI updated
+                                setTimeout(() => {
+                                    statusMessage.textContent = 'Game is now running. You can close this window.';
+                                }, 2000);
+                            } else {
+                                // Error starting game
+                                startButton.disabled = false;
+                                startButton.textContent = 'Start Playing';
+                                statusMessage.textContent = data.message || 'Error starting game';
+                                statusMessage.style.color = '#db4437'; // Red for error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error starting game:', error);
+                            startButton.disabled = false;
+                            startButton.textContent = 'Start Playing';
+                            statusMessage.textContent = 'Error starting game. Please try again.';
+                            statusMessage.style.color = '#db4437'; // Red for error
+                        });
+                }
+            });
+            
+            // Function to update start button state
+            function updateStartButton() {
+                if (selectedDifficulty !== null && selectedColor !== null) {
+                    startButton.classList.add('active');
+                    startButton.disabled = false;
+                } else {
+                    startButton.classList.remove('active');
+                    startButton.disabled = true;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
